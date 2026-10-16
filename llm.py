@@ -42,6 +42,9 @@ RETRY_STATUS = {403, 429, 500, 503}
 def make_client():
     """Returnează (client, model, nume_furnizor), conform variabilelor de mediu."""
     provider = os.environ.get("LLM_PROVIDER", "gemini").lower()
+    if provider == "mock":  # NOU: model fals, fără rețea și fără cheie
+        from mock_llm import MockClient  # NOU
+        return MockClient(), "mock-1", "mock"  # NOU
     if provider not in PROVIDERS:
         raise SystemExit(f"LLM_PROVIDER necunoscut: {provider}. Alegeți: {', '.join(PROVIDERS)}")
     cfg = PROVIDERS[provider]
